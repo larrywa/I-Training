@@ -14,7 +14,7 @@
 
 # Module 1: Provision Azure services and explore Online Auction System 
 
-> Duration: 45 minutes 
+> Duration: 45 minutes or more
 
 # Module 1: Table of Contents 
 
