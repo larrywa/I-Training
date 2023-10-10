@@ -1,0 +1,186 @@
+version: '3'
+
+services:
+
+  oasapp:
+    image: oasapp:1.0
+    container_name: oasapp
+    hostname: oasapp
+    build:
+      context: ./oasapp
+      dockerfile: Dockerfile
+    depends_on:
+      - apigateway
+    ports:
+      - 4200:4200
+    environment:
+      - identityAPI=http://apigateway:5010/identity
+      - auctionAPI=http://apigateway:5010/auction
+      - bidAPI=http://apigateway:5010/bid
+      - paymentAPI=http://apigateway:5010/payment
+      - instrumentationKey=1602cf94-ad9f-48aa-8d01-a2751c908a56
+
+  apigateway:
+    image: apigateway:1.0
+    container_name: apigateway
+    hostname: apigateway
+    build:
+      context: ./apigateway
+      dockerfile: Dockerfile
+    depends_on:
+      - identityservice
+      - auctionservice
+      - bidservice
+      - paymentservice
+      - notificationservice
+      - smtp4dev
+    ports:
+      - 5010:5010
+
+
+  identityservice:
+    image: identityservice:1.0
+    container_name: identityservice
+    hostname: identityservice
+    build:
+      context: ./identityservice
+      dockerfile: Dockerfile
+    ports: 
+      - 5032:5032
+
+
+  auctionservice:
+    image: auctionservice:1.0
+    container_name: auctionservice
+    hostname: auctionservice
+    build:
+      context: ./auctionservice/auctionservice
+      dockerfile: Dockerfile
+    ports: 
+      - 3000:3000
+    environment:
+      - instrumentationKey=1602cf94-ad9f-48aa-8d01-a2751c908a56
+      - mysqlhost=auctiondbsrv-7f4adea.mysql.database.azure.com
+      - mysqlusername=mydbuser7f4adea
+      - mysqlpassword=P@ssw0rd!@#
+      - mysqldbname=auctionservicedb
+
+  bidservice:
+    image: bidservice:1.0
+    container_name: bidservice
+    hostname: bidservice
+    build:
+      context: ./bidservice/bidservice
+      dockerfile: Dockerfile
+    ports:
+      - 9090:9090
+    environment:
+      - cosmosdbconnectionstring=mongodb://bidacc7f4adea:oH8jJtAdAIxLxE8vASkiOZ83NMPnlWWMyroD3UtEZ2hZfnHCfXoisD0vK6iQ53hpyDuiM3DpDYr6ACDbGAcfWA==@bidacc7f4adea.mongo.cosmos.azure.com:10255/?ssl=true&replicaSet=globaldb&
+      - bootstrap.servers=eventhub7f4adea.servicebus.windows.net:9093
+      - kakfkaendpoint=sb://eventhub7f4adea.servicebus.windows.net/
+      - kafkasharedaccesskeyname=RootManageSharedAccessKey
+      - kafkasharedaccesskey=TjRU9Po0Z3E2rl2qPWZsxDEiMXbjfrCix+AEhIKHh6g=
+
+  paymentservice:
+    image: paymentservice:1.0
+    container_name: paymentservice 
+    hostname: paymentservice 
+    build:
+      context: ./paymentservice/paymentservice 
+      dockerfile: Dockerfile
+    ports: 
+      - 5000:80
+    environment:
+      - InstrumentationKey=1602cf94-ad9f-48aa-8d01-a2751c908a56
+      - ConnectionStrings__PaymentServiceContext=Server=tcp:oas-7f4adea-sql.database.windows.net,1433;Initial Catalog=AuctionPaymentDB;Persist Security Info=False;User ID=7f4adeasqllogin;Password=P@ssw0rd!@#;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
+      - BootstrapServers=eventhub7f4adea.servicebus.windows.net:9093
+      - SaslPassword=Endpoint=sb://eventhub7f4adea.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=TjRU9Po0Z3E2rl2qPWZsxDEiMXbjfrCix+AEhIKHh6g=
+      - GroupId=onlineauctiongroup
+      - PaymentTopicName=paymenttopic
+
+  bidlistener:
+    image: bidlistener:1.0
+    container_name: bidlistener
+    hostname: bidlistener
+    build:
+      context: ./bidlistener
+      dockerfile: Dockerfile
+    depends_on:
+      - apigateway
+    environment:
+      - InstrumentationKey=1602cf94-ad9f-48aa-8d01-a2751c908a56
+      - BootstrapServers=eventhub7f4adea.servicebus.windows.net:9093
+      - SaslPassword=Endpoint=sb://eventhub7f4adea.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=TjRU9Po0Z3E2rl2qPWZsxDEiMXbjfrCix+AEhIKHh6g=
+      - GroupId=onlineauctiongroup
+      - AuctionServiceURL=http://apigateway:5010/auction
+      - BidTopicName=bidtopic
+      - Mode=Production
+
+  auctionpaymentlistener:
+    image: auctionpaymentlistener:1.0
+    container_name: auctionpaymentlistener
+    hostname: auctionpaymentlistener
+    build:
+      context: ./auctionpaymentlistener
+      dockerfile: Dockerfile
+    depends_on:
+      - apigateway
+    environment:
+      - InstrumentationKey=1602cf94-ad9f-48aa-8d01-a2751c908a56
+      - BootstrapServers=eventhub7f4adea.servicebus.windows.net:9093
+      - SaslPassword=Endpoint=sb://eventhub7f4adea.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=TjRU9Po0Z3E2rl2qPWZsxDEiMXbjfrCix+AEhIKHh6g=
+      - GroupId=onlineauctiongroup
+      - AuctionServiceURL=http://apigateway:5010/auction
+      - PaymentTopicName=paymenttopic
+      - NotificationTopicName=notificationtopic
+      - Mode=Production
+
+  notificationlistener:
+    image: notificationlistener:1.0
+    container_name: notificationlistener
+    hostname: notificationlistener
+    build:
+      context: ./notificationlistener
+      dockerfile: Dockerfile
+    depends_on:
+      - apigateway
+    environment:
+      - InstrumentationKey=1602cf94-ad9f-48aa-8d01-a2751c908a56
+      - BootstrapServers=eventhub7f4adea.servicebus.windows.net:9093
+      - SaslPassword=Endpoint=sb://eventhub7f4adea.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=TjRU9Po0Z3E2rl2qPWZsxDEiMXbjfrCix+AEhIKHh6g=
+      - GroupId=onlineauctiongroup
+      - NotificationServiceURL=http://apigateway:5010/notification
+      - NotificationTopicName=notificationtopic
+      - Mode=Production
+
+  notificationservice:
+    image: notificationservice:1.0
+    container_name: notificationservice
+    hostname: notificationservice
+    build:
+      context: ./notificationservice
+      dockerfile: Dockerfile
+    ports: 
+      - 3005:3005
+
+  smtp4dev:
+    image: rnwood/smtp4dev
+    container_name: smtp4dev
+    hostname: smtp4dev
+    ports:
+      - 3001:80
+      - 25:25
+
+
+
+
+
+
+
+
+
+
+
+
+
+

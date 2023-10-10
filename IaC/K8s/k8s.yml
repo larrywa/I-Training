@@ -1,0 +1,470 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auctionservice
+  labels:
+    app: auctionservice
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: auctionservice
+  template:
+    metadata:
+      labels:
+        app: auctionservice
+    spec:
+      containers:
+      - name: auctionservice
+        image: oasacr7f4adea.azurecr.io/auctionservice:1.0
+        ports:
+        - containerPort: 3000
+        env:
+         - name: instrumentationKey
+           value: 1602cf94-ad9f-48aa-8d01-a2751c908a56
+         - name: mysqlhost
+           value: auctiondbsrv-7f4adea.mysql.database.azure.com
+         - name: mysqlusername
+           value: mydbuser7f4adea
+         - name: mysqlpassword
+           value: P@ssw0rd!@#
+         - name: mysqldbname
+           value: auctionservicedb
+      imagePullSecrets:
+      - name: oassecret
+
+---
+apiVersion: v1
+kind: Service
+metadata:  
+  name: auctionservice
+  labels:
+    app: auctionservice
+spec:
+  ports:
+  - port: 3000
+    targetPort: 3000
+    protocol: TCP
+  type: ClusterIP
+  selector:
+    app: auctionservice
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bidservice
+  labels:
+    app: bidservice
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: bidservice
+  template:
+    metadata:
+      labels:
+        app: bidservice
+    spec:
+      containers:
+      - name: bidservice
+        image: oasacr7f4adea.azurecr.io/bidservice:1.0
+        ports:
+        - containerPort: 9090
+        env:
+         - name: cosmosdbconnectionstring
+           value: 
+         - name: bootstrap.servers
+           value: eventhub7f4adea.servicebus.windows.net:9093
+         - name: kakfkaendpoint
+           value: sb://eventhub7f4adea.servicebus.windows.net/
+         - name: kafkasharedaccesskeyname
+           value: RootManageSharedAccessKey
+         - name: kafkasharedaccesskey
+           value: TjRU9Po0Z3E2rl2qPWZsxDEiMXbjfrCix+AEhIKHh6g=
+      imagePullSecrets:
+      - name: oassecret
+
+---
+apiVersion: v1
+kind: Service
+metadata:  
+  name: bidservice
+  labels:
+    app: bidservice
+spec:
+  ports:
+  - port: 9090
+    targetPort: 9090
+    protocol: TCP
+  type: ClusterIP
+  selector:
+    app: bidservice
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: paymentservice
+  labels:
+    app: paymentservice
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: paymentservice
+  template:
+    metadata:
+      labels:
+        app: paymentservice
+    spec:
+      containers:
+      - name: paymentservice
+        image: oasacr7f4adea.azurecr.io/paymentservice:1.0
+        ports:
+        - containerPort: 80
+        env:
+         - name: InstrumentationKey
+           value: 1602cf94-ad9f-48aa-8d01-a2751c908a56
+         - name: ConnectionStrings__PaymentServiceContext
+           value: Server=tcp:oas-7f4adea-sql.database.windows.net,1433;Initial Catalog=AuctionPaymentDB;Persist Security Info=False;User ID=7f4adeasqllogin;Password=P@ssw0rd!@#;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
+         - name: BootstrapServers
+           value: eventhub7f4adea.servicebus.windows.net:9093
+         - name: SaslPassword
+           value: Endpoint=sb://eventhub7f4adea.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=TjRU9Po0Z3E2rl2qPWZsxDEiMXbjfrCix+AEhIKHh6g=
+         - name: GroupId
+           value: onlineauctiongroup
+         - name: PaymentTopicName
+           value: paymenttopic
+      imagePullSecrets:
+      - name: oassecret
+
+---
+apiVersion: v1
+kind: Service
+metadata:  
+  name: paymentservice
+  labels:
+    app: paymentservice
+spec:
+  ports:
+  - port: 5000
+    targetPort: 80
+    protocol: TCP
+  type: ClusterIP
+  selector:
+    app: paymentservice
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: identityservice
+  labels:
+    app: identityservice
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: identityservice
+  template:
+    metadata:
+      labels:
+        app: identityservice
+    spec:
+      containers:
+      - name: identityservice
+        image: oasacr7f4adea.azurecr.io/identityservice:1.0
+        ports:
+        - containerPort: 5032
+      imagePullSecrets:
+      - name: oassecret
+
+---
+apiVersion: v1
+kind: Service
+metadata:  
+  name: identityservice
+  labels:
+    app: identityservice
+spec:
+  ports:
+  - port: 5032
+    targetPort: 5032
+    protocol: TCP
+  type: ClusterIP
+  selector:
+    app: identityservice
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apigateway
+  labels:
+    app: apigateway
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: apigateway
+  template:
+    metadata:
+      labels:
+        app: apigateway
+    spec:
+      containers:
+      - name: apigateway
+        image: oasacr7f4adea.azurecr.io/apigateway:1.0
+        ports:
+        - containerPort: 5010
+      imagePullSecrets:
+      - name: oassecret
+
+---
+apiVersion: v1
+kind: Service
+metadata:  
+  name: apigateway
+  labels:
+    app: apigateway
+spec:
+  ports:
+  - port: 5010
+    targetPort: 5010
+    protocol: TCP
+  type: LoadBalancer
+  selector:
+    app: apigateway
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oasapp
+  labels:
+    app: oasapp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: oasapp
+  template:
+    metadata:
+      labels:
+        app: oasapp
+    spec:
+      containers:
+      - name: oasapp
+        image: oasacr7f4adea.azurecr.io/oasapp:1.0
+        ports:
+        - containerPort: 4200
+        env:
+         - name: identityAPI
+           value: http://apigateway:5010/identity
+         - name: auctionAPI
+           value: http://apigateway:5010/auction
+         - name: bidAPI
+           value: http://apigateway:5010/bid
+         - name: paymentAPI
+           value: http://apigateway:5010/payment
+         - name: instrumentationKey
+           value: 1602cf94-ad9f-48aa-8d01-a2751c908a56
+      imagePullSecrets:
+      - name: oassecret
+
+---
+apiVersion: v1
+kind: Service
+metadata:  
+  name: oasapp
+  labels:
+    app: oasapp
+spec:
+  ports:
+  - port: 4200
+    targetPort: 4200
+    protocol: TCP
+  type: LoadBalancer
+  selector:
+    app: oasapp
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bidlistener
+  labels:
+    app: bidlistener
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bidlistener
+  template:
+    metadata:
+      labels:
+        app: bidlistener
+    spec:
+      containers:
+      - name: bidlistener
+        image: oasacr7f4adea.azurecr.io/bidlistener:1.0
+        env:
+         - name: InstrumentationKey
+           value: 1602cf94-ad9f-48aa-8d01-a2751c908a56
+         - name: BootstrapServers
+           value: eventhub7f4adea.servicebus.windows.net:9093
+         - name: SaslPassword
+           value: Endpoint=sb://eventhub7f4adea.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=TjRU9Po0Z3E2rl2qPWZsxDEiMXbjfrCix+AEhIKHh6g=
+         - name: GroupId
+           value: onlineauctiongroup
+         - name: AuctionServiceURL
+           value: http://apigateway:5010/auction
+         - name: BidTopicName
+           value: bidtopic
+      imagePullSecrets:
+      - name: oassecret
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auctionpaymentlistener
+  labels:
+    app: auctionpaymentlistener
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auctionpaymentlistener
+  template:
+    metadata:
+      labels:
+        app: auctionpaymentlistener
+    spec:
+      containers:
+      - name: auctionpaymentlistener
+        image: oasacr7f4adea.azurecr.io/auctionpaymentlistener:1.0
+        env:
+         - name: InstrumentationKey
+           value: 1602cf94-ad9f-48aa-8d01-a2751c908a56
+         - name: BootstrapServers
+           value: eventhub7f4adea.servicebus.windows.net:9093
+         - name: SaslPassword
+           value: Endpoint=sb://eventhub7f4adea.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=TjRU9Po0Z3E2rl2qPWZsxDEiMXbjfrCix+AEhIKHh6g=
+         - name: GroupId
+           value: onlineauctiongroup
+         - name: AuctionServiceURL
+           value: http://apigateway:5010/auction
+         - name: PaymentTopicName
+           value: paymenttopic
+         - name: NotificationTopicName
+           value: notificationtopic
+         - name: Mode
+           value: Production
+      imagePullSecrets:
+      - name: oassecret
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notificationlistener
+  labels:
+    app: notificationlistener
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notificationlistener
+  template:
+    metadata:
+      labels:
+        app: notificationlistener
+    spec:
+      containers:
+      - name: notificationlistener
+        image: oasacr7f4adea.azurecr.io/notificationlistener:1.0
+        env:
+         - name: InstrumentationKey
+           value: 1602cf94-ad9f-48aa-8d01-a2751c908a56
+         - name: BootstrapServers
+           value: eventhub7f4adea.servicebus.windows.net:9093
+         - name: SaslPassword
+           value: Endpoint=sb://eventhub7f4adea.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=TjRU9Po0Z3E2rl2qPWZsxDEiMXbjfrCix+AEhIKHh6g=
+         - name: GroupId
+           value: onlineauctiongroup
+         - name: NotificationServiceURL
+           value: http://apigateway:5010/notification
+         - name: NotificationTopicName
+           value: notificationtopic
+         - name: Mode
+           value: Production
+      imagePullSecrets:
+      - name: oassecret
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notificationservice
+  labels:
+    app: notificationservice
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: notificationservice
+  template:
+    metadata:
+      labels:
+        app: notificationservice
+    spec:
+      containers:
+      - name: notificationservice
+        image: oasacr7f4adea.azurecr.io/notificationservice:1.0
+        ports:
+        - containerPort: 3005
+      imagePullSecrets:
+      - name: oassecret
+
+---
+apiVersion: v1
+kind: Service
+metadata:  
+  name: notificationservice
+  labels:
+    app: notificationservice
+spec:
+  ports:
+  - port: 3005
+    targetPort: 3005
+    protocol: TCP
+  type: ClusterIP
+  selector:
+    app: notificationservice
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
