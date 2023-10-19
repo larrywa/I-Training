@@ -12,17 +12,15 @@
 
 [Module 7: DevOps with Containers](#module-7-devops-with-containers)
 
-# Module 1: Provision Azure services and explore Online Auction System 
+# Module 1: Provision Azure services and explore the Online Auction System 
 
-> Duration: 45 minutes or more
+> Duration: 45 minutes 
 
 # Module 1: Table of Contents 
 
 [Exercise 1: Provision Azure Services using ARM template](#exercise-1-provision-azure-services-using-arm-template)
 
 ### Prerequisites 
-
-The Windows LOD VM is packaged with all of the required software to perform this lab. 
 
 The lab files are required to complete the hands-on exercises and have been pre-downloaded on the Virtual Machine. 
 
@@ -65,24 +63,10 @@ Throughout the entire workshop, you will be using the same resources we provisio
    
     ![Mod01_E01_T07.png](Content/Mod01_E01_T07.png)
 
-1. Go back to the ``Windows Terminal`` and run the following command to set the execution policy. 
+1. While it is provisioning resources, you will be asked to login to Azure. Enter same credentials you've used to setup your Azure subscription. The PowerShell script provisions services on Azure, sets up databases for microservices and spins up the application as docker containers.
 
-    ``Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process``
-
-    >PowerShell's execution policy is a safety feature that controls the conditions under which PowerShell loads configuration files and runs scripts. This feature helps prevent the execution of malicious scripts. On a Windows computer you can set an execution policy for the local computer, for the current user, or for a particular session.
-
-1. Now run the deployment by executing the ``Deploy-AzureResourceGroup.ps1`` file from the ``Windows Terminal``. Make sure you are at the right folder path i.e. ``c:\labs\IaC\ARM``
-
-    ``.\Deploy-AzureResourceGroup.ps1``
+    Once all the containers are up, you will find this log stating ``Angular Live Development Server is listening on 0.0.0.0:4200``. Access the website from browser by entering this URL ``http://localhost:4200``
     
-    ![Mod01_E01_T06.png](Content/Mod01_E01_T06.png)
-
-1. While it is provisioning resources, it will ask to login to Azure. Enter same credentials you've used to setup your Azure subscription.
-
-1. PowerShell script provision services on Azure, setup databases for microservices and spin up the application as docker containers.
-
-1. Once all the containers are up, you will find this log stating ``Angular Live Development Server is listening on 0.0.0.0:4200``. Access the website from browser by entering this URL ``http://localhost:4200``
-
     ![Mod01_E01_T09.png](Content/Mod01_E01_T09.png)
 
 1. Click on Login and enter credentials as follows: 
@@ -105,7 +89,7 @@ Throughout the entire workshop, you will be using the same resources we provisio
 
 ### Congratulations!
 
-You have successfully completed this module. Click ``Next`` to advance to the next module.
+You have successfully completed this module. 
 
 
 # Module 4: Table of Contents 
@@ -283,9 +267,9 @@ To see a comprehensive list of docker commands available ``[click here] (https:/
 
 ### Congratulations!
 
-You have successfully completed this exercise. Click ``Next`` to advance to the next exercise.
+You have successfully completed this exercise. 
 
-## ``Exercise 2: Building custom container s using Dockerfiles: Node.js, NGINX, .NET 6``
+# ``Exercise 2: Building custom container s using Dockerfiles: Node.js, NGINX, .NET 6``
 
 A Dockerfile is essentially a plain text file with Docker commands in it that are used to create a new . You can think of it as a configuration file with a set of instructions needed to assemble a new . In this exercise, you will learn the common commands that go into Dockerfile by creating custom s based on common technologies like NGINX, Node JS and .NET.  
 
@@ -333,7 +317,7 @@ In this task you will create a new  based on the Node.js base . You will start w
 
 1. Run the command 
 
-    ``docker s`` 
+    ``docker ps`` 
 
     and notice the new container  appears with the name "``mynodejs``". Also notice the presence of parent  "``node``" that was also pulled from Docker Hub during the build operation (if you were using the provided lab machines, they may have already been cached locally).
 
@@ -354,7 +338,7 @@ In this task you will create a new  based on the Node.js base . You will start w
 
 ### Congratulations!
 
-You have successfully completed this topic. Click ``Next`` to advance to the building Nginx container .
+You have successfully completed this topic. .
 
 # Building and Running NGINX Container
 
@@ -402,7 +386,7 @@ In this task you will create a new  using the NGINX web server base  hosting a s
     ![Mod04_E02_T12.png](Content/Mod04_E02_T12.png)
 1. Run the command 
 
-    ``docker s``
+    ``docker ps``
 
     >Notice the new container  appears with the name ``mynginx``. Also notice the presence of parent  ``nginx`` that was pulled from Docker Hub during the build operation. Take a look at the sizes of different s also. This will become important when you build your own custom s to reduce the size for both security and performance.  
 
@@ -420,7 +404,7 @@ In this task you will create a new  using the NGINX web server base  hosting a s
 
 ### Congratulations!
 
-You have successfully completed this topic. Click ``Next`` to advance to the building ASP .NET Core Web Application.
+You have successfully completed this topic. 
 
 
 
@@ -479,7 +463,7 @@ In this task you will build ASP .NET Core Web Application and then package and r
 
 ### Congratulations!
 
-You have successfully completed this exercise. Click ``Next`` to advance to the next exercise.
+You have successfully completed this exercise. 
 
 
 
@@ -521,7 +505,7 @@ In the previous exercise, you were able to build and run containers based on Doc
     > Additional information regarding running commands inside docker container](https://docs.docker.com/engine/reference/commandline/exec)
 ### Congratulations!
 
-You have successfully completed this topic. Click ``Next`` to advance to make changes to a running container.
+You have successfully completed this topic. 
 
 
 # Exercise 4: Tagging 
@@ -565,7 +549,7 @@ In this exercise you will learn the role of tagging in container and how to tag 
 
 1. To see the updated tag for "``mynodejs``"  run the command 
 
-    ``docker s``
+    ``docker images``
 
     ![Mod04_E04_T03.png](Content/Mod04_E04_T03.png)
 
@@ -600,7 +584,7 @@ Tagging a new  is done at the time when you build a container . it's a straightf
 
 1. Run a command to list all the s
 
-    ``docker s`` 
+    ``docker images`` 
     
     > Notice, there is the new container  with tag "``v1``"
 
@@ -608,7 +592,7 @@ Tagging a new  is done at the time when you build a container . it's a straightf
 
 ### Congratulations!
 
-You have successfully completed this exercise. Click ``Next`` to advance to the next exercise.
+You have successfully completed this exercise. 
 
 # Module 5: Advanced Container Topics 
 
@@ -872,7 +856,7 @@ the location may be different.
 
 ### Congratulations!
 
-You have successfully completed this exercise. Click ``Next`` to advance to the next exercise.
+You have successfully completed this exercise. 
 
 # Exercise 3: Working with Docker-Compose 
 
@@ -978,7 +962,6 @@ As this is a multi-container scenario, you will use a docker-compose file to:
     ```
     There are certain specifications being set in this section:
 
-    - ```` specifies the  to start the container from.
     - ``container_name`` is a string that specifies a custom container name, rather than a generated default name. We are setting the name of the container to be oasapp
     - ``hostname`` declares a custom host name to use for the service container. MUST be a valid RFC 1123 hostname.
     - ``build`` specifies the build configuration for creating container  from source.  You will see two things specified as part of the build (context and dockerfile).  Context is ``required``.
@@ -989,7 +972,7 @@ As this is a multi-container scenario, you will use a docker-compose file to:
     - ``environment`` defines environment variables set in the container. environment can use either an array or a map.  We are using array syntax in our example. Any boolean values; true, false, yes, no, SHOULD be enclosed in quotes to ensure they are not converted to True or False by the YAML parser.  For our environment variables we are defining the URL addresses of the services front end would need to talk to.  
             
     >You can see here that we are not using FQDN for the services but ``service name`` from the docker compose file, and docker compose will handle all the wiring behind the scenes.
-
+    
 1. Next ``service`` listed in docker-compose file is ``apigateway``.  
 
     >The API Gateway sits between the frontend application and the collection of backend Microservices. An API Gateway acts as a reverse proxy that accepts all the Application Programming Interface calls (API), aggregates the various services according to the front end needs, and fulfils the appropriate data.  
@@ -1073,8 +1056,7 @@ As this is a multi-container scenario, you will use a docker-compose file to:
 
 ### Congratulations!
 
-You have successfully completed this topic. Click ``Next`` to advance to the start application using docker compose up.
-===
+You have successfully completed this topic. 
 
 # Docker Compose Up
 ``docker-compose up`` is a Docker command to start and run an entire app on a standalone host that contains multiple services, for example, Web, DB, etc. It can also create volumes and networks at the same time and attach to the containers that are defined in a file called ‘docker-compose.yml’. 
@@ -1155,7 +1137,7 @@ When you wish to stop and remove the multi-container application that was launch
 
 ### Congratulations!
 
-You have successfully completed this module. Click ``Next`` to advance to the next module.
+You have successfully completed this module.
 
 
 # Module 6: Container Hosting and Orchestration using AKS 
@@ -1411,6 +1393,7 @@ In this exercise, you are going to create an Azure DevOps account which will be 
 1. Select your ``Azure Pass Subscription``, and then select *Save*.
 
     ![Mod07_E01_T08.png](Content/Mod07_E01_T08.png)
+2. After you select your subscription and select save, you will notice that the 'Paid parallel jobs' fields will be enabled. Put a '2' in each of these fields.
 
 ### Congratulations!
 
@@ -1435,21 +1418,7 @@ In this exercise, you are going to complete the first phase of the CI/CD pipelin
     
     ![Mod07_E02_T01.png](Content/Mod07_E02_T01.png)
 
-1. In the Textboxes bellow enter your Full name and your email address you used for DevOps
-
-    ``Full name: ``
-
-    @lab.TextBox(fullname)
-
-    ``Email:``
-
-    @lab.TextBox(email)
-
-1. Run the following commands, one at a time 
-   
-    >- The two ``git config`` commands are a one-time setup. 
-    - ``git init`` will initialize your folder as a git repository and add an empty hidden ``.git`` folder. 
-    - ``git add`` and ``commit`` are necessary steps anytime you make a change to your code and want it to be staged (tracked and ready to be committed locally) and committed (ready to be pushed to the server)  
+1. Run the following commands, one at a time to setup your local git repository.
 
     ``git config --global user.email youremail``
 
@@ -1460,6 +1429,7 @@ In this exercise, you are going to complete the first phase of the CI/CD pipelin
     ``git add .``
 
     ``git commit -m 'adding notification project'``
+
 
 
 1. Go to your browser, and in Azure DevOps, navigate to your ``navigationservice`` project.
@@ -1510,7 +1480,7 @@ In this exercise, you are going to complete the first phase of the CI/CD pipelin
     
 ### Congratulations!
 
-You have successfully completed this exercise. Click ``Next`` to advance to the next exercise.
+You have successfully completed this exercise. 
 
 ## Exercise 3: Build and deploy to Azure Kubernetes Service with Azure Pipelines 
 
@@ -1592,10 +1562,10 @@ In this exercise you will create Azure pipeline and deploy your notification ser
 
 ### Congratulations!
 
-You have successfully completed this exercise. Click ``Next`` to validate and explore the pipeline.
-===
+You have successfully completed this exercise. 
 
-## Exercise 4: Explore and validate pipelines  
+Exercise 4: Explore and validate pipelines  
+===
 
 ---
 [Return to list of exercises](#module-7-table-of-contents) - [Return to list of modules](#modules) 
@@ -1661,7 +1631,7 @@ You have successfully completed this exercise. Click ``Next`` to validate and ex
 
 1. Now you can navigate to the OAS system by typing the following URL in your browser.
 
-    ``http://@lab.Variable(oasapp):4200``
+    ``http://your-oas-external-ip-address:4200``
 
 #### Congratulations
 
