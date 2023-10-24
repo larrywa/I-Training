@@ -7,7 +7,7 @@
 [Module 4: Container Core Concepts](#module-4-container-core-concepts)
 
 [Module 5: Advanced Container Topics](#module-5-advanced-container-topics)
-
+v
 [Module 6: Container Hosting and Orchestration using AKS](#module-6-container-hosting-and-orchestration-using-aks)
 
 [Module 7: DevOps with Containers](#module-7-devops-with-containers)
@@ -236,7 +236,7 @@ To see a comprehensive list of docker commands available ``[click here] (https:/
     >The "``-f``" switch is used to ``force`` the remove operation. It's needed if you are trying to remove a container that is not already stopped.
 
 1. To validate that container has been removed completely run ``docker ps -a`` command. 
-    >Note that container starting with the ID @lab.Variable(ContainerId1) is not in the list.
+    >
 
     ![Mod04_E01_T20.png](Content/Mod04_E01_T20.png)
 
@@ -249,7 +249,7 @@ To see a comprehensive list of docker commands available ``[click here] (https:/
 1. Now that we stopped all the containers, we can remove the  (``msftcontainers/wordpress``) used to run the containers.  Removing a container  form a local system will let you reclaim its disk space. 
     >Please note that this operation is ``irreversible`` so proceed with caution. In this task you will remove the WordPress container  as you will not be using it any more. You must stop all containers using the  before you can delete the , unless you use the force parameter.
 
-1. To remove a container , you'll need its  ID. Run command ``docker s``
+1. To remove a container , you'll need its  ID. Run command ``docker ps``
    
     ![Mod04_E01_T22.png](Content/Mod04_E01_T22.png)
 
@@ -259,7 +259,7 @@ To see a comprehensive list of docker commands available ``[click here] (https:/
 
     ![Mod04_E01_T23.png](Content/Mod04_E01_T23.png)
 
-1. Now, run the command ``docker s`` 
+1. Now, run the command ``docker ps`` 
 
     >Notice that "msftcontainers/wordpress"  is no longer available.
 
@@ -649,7 +649,7 @@ Volumes are initialized when a container is created. Some of the key characteris
 
 1. You are now ready to run a container in the interactive mode and mount the host directory as a data volume. Run the command 
 
-    ``docker run -it -v C:/host-data/:C:/container-data/ mcr.microsoft.com/windows/nanoserver:20H2 cmd``
+    ``docker run -it -v C:/host-data/:C:/container-data/ mcr.microsoft.com/windows/nanoserver:ltsc2022 cmd``
 ![Mod05_E01_T02.png](Content/Mod05_E01_T02.png)
 
     > Notice the ``-v`` switch that is required to mount the host directory ``C:\host-data`` inside the container as ``C:\container-data``. This will result in container access to contents of ``C:\host-data`` on the host inside the container as ``C:\container-data``. 
@@ -725,7 +725,7 @@ Volumes are initialized when a container is created. Some of the key characteris
 
 1. Let's run another container in interactive mode and mount the host directory as a data volume. Run the command 
 
-    ``docker run -it -v C:/host-data/:C:/container-data/ mcr.microsoft.com/windows/nanoserver:20H2 cmd`` 
+    ``docker run -it -v C:/host-data/:C:/container-data/ mcr.microsoft.com/windows/nanoserver:ltsc2022 cmd`` 
 
     ![Mod05_E01_T11.png](Content/Mod05_E01_T11.png)
 
