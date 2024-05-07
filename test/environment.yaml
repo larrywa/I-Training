@@ -1,0 +1,48 @@
+name: AKSCluster
+summary: AKS Cluster Environment
+description: Deploys a standard AKS cluster
+runner: ARM
+templatePath: azuredeploy.json
+parameters:
+- id: "clusterName"
+  name: "clusterName"
+  description: "The name of the AKS cluster"
+  default: "lwaksdevenvcluster"
+  type: "string"
+  required: true
+- id: "location"
+  name: "location"
+  description: "The region for the cluster"
+  default: "eastus"
+  type: "string"
+  required: true
+- id: "osDiskSizeGB"
+  name: "osDiskSizeGB"
+  description: "os Disk size in GB"
+  default: 0
+  type: "integer"
+  required: true
+- id: "agentCount"
+  name: "agentCount"
+  description: "The number of nodes for the cluster."
+  default: 3
+  type: "integer"
+  required: true
+- id: "agentVMSize"
+  name: "agentVMSize"
+  description: "The size of the Virtual Machine."
+  default: "standard_d2s_v3"
+  type: "string"
+  required: true
+- id: "linuxAdminUsername"
+  name: "linuxAdminUsername"
+  description: "Linux admin username."
+  default: "azureuser"
+  type: "string"
+  required: true
+- id: "sshRSAPublicKey"
+  name: "sshRSAPublicKey"
+  description: "Configure all linux machines with the SSH RSA public key string."
+  default: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDMteetkTpRSrYbI36czeibwhif0La9eH6bPdtAy3WFL4cZr7k8OBRzG/zekFHIKWB31OWQkRiWwP2sqK+Fzd/XRT7kw2cUNT5BAQLaSudyD2l6C1i9tcWsU1p5IxpFTi/cbNRcyT1z3wC1hEchYS8QlRyrXrcreAHmqKiGuuLKrZLQXOAH4ZXiLzYKzcHgvG5wQSyaOCzlsrE1lzBSAJ/yxC6DJuhta4kYwkz7W+Xz8QCpStikxQzq+r0CyLoe2AKSsj48H1gbsHXxxFJSoa54SrtSbPNHONPNtxjmKGgrkj/J513n91c5g3eZj1U+4d37YERulWMqlImjXOfocqDfX8c/RAkwmpibVg7bqLEtAtETGxHSGA9uN/4Rf7aAxuYVKJbnescMIQflcaaG/wwjnn9SgFJO2sTw3LtRGkCHM6yz4YSixuG2gm9aawnvwueDpamlP3/FvJpITj7MQfPmIcYXBBS552pJpdhkcbwt9YkJAwSKuS5S88LAacCL34HrilL9k18xrSETHdwqvF97DinyXJNvAdKENsAGUsIK+qHoy/0AhJitYRgRrhnNCWBJ+aTCQLwhtNgMzetkgRH4z6ouQG+BJLTVD69Tyf1kAfrCcN2dTkxJqMyBjmaGdZNsTTTjkesj7TmuL361a0Yyu4kmgmTMR0nVSD8OTW/1MQ== northamerica\larrywa@DESKTOP-A34RSG3"
+  type: "string"
+  required: true
