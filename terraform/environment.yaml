@@ -2,5 +2,5 @@ name: WebApp
     version: 1.0.0
     summary: Azure Web App Environment
     description: Deploys a web app in Azure without a datastore
-    runner: "lwterraform.azurecr.io/terraform:demo"
+    runner: "lwterraformacr.azurecr.io/terraform:demo"
     templatePath: webapp.tf
