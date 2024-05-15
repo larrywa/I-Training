@@ -1,6 +1,6 @@
 name: LinuxWebApp
-    version: 1.0.0
-    summary: Azure Linux Web App Environment
-    description: Deploys a web app in Azure without a datastore
-    runner: "lwterraformacr.azurecr.io/terraform:demo"
-    templatePath: webapp.tf
+version: 1.0.0
+summary: Azure Linux Web App Environment
+description: Deploys a web app in Azure without a datastore
+runner: "lwterraformacr.azurecr.io/terraform:demo"
+templatePath: webapp.tf
