@@ -20,7 +20,7 @@ resource "random_integer" "ri" {
 
 # Create the resource group
 data "azurerm_resource_group" "rg" {
-  name     = var.resource_group_name
+  name     = "webappproject-tfenvironment2"
 }
 
 # Create the Linux App Service Plan
