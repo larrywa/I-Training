@@ -3,4 +3,4 @@ version: 1.0.0
 summary: Azure Linux Web App Environment
 description: Deploys a web app in Azure without a datastore
 runner: "lwtfacr2.azurecr.io/terraform:demo"
-templatePath: webapp.tf
+templatePath: webapptf2.tf
