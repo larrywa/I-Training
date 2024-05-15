@@ -12,6 +12,8 @@ provider "azurerm" {
   features {}
 }
 
+variable "resource_group_name" {}
+
 # Generate a random integer to create a globally unique name
 resource "random_integer" "ri" {
   min = 10000
@@ -20,7 +22,7 @@ resource "random_integer" "ri" {
 
 # Create the resource group
 data "azurerm_resource_group" "rg" {
-  name     = "webappproject-tfenvironment2"
+  name     = "var.resource_group_name"
 }
 
 # Create the Linux App Service Plan
